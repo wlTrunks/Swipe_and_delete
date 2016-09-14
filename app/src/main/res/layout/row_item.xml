@@ -28,9 +28,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:visibility="gone"
+        android:visibility="visible"
         android:weightSum="2"
-        android:background="#b19393">
+        android:background="#b19393"
+        android:alpha="0">
 
         <TextView
             android:id="@+id/item_delete"

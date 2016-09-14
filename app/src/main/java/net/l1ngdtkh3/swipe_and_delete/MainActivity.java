@@ -59,14 +59,15 @@ public class MainActivity extends AppCompatActivity {
                 }
                 ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer().setVisibility(View.VISIBLE);
             }
-            @Override
-            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                if (viewHolder instanceof ItemAdapter.ItemViewHolder) {
-                    int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
-                    return makeMovementFlags(0, swipeFlags);
-                } else
-                    return 0;
-            }
+
+//            @Override
+//            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+//                if (viewHolder instanceof ItemAdapter.ItemViewHolder) {
+//                    int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+//                    return makeMovementFlags(0, swipeFlags);
+//                } else
+//                    return 0;
+//            }
 
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
@@ -101,12 +102,27 @@ public class MainActivity extends AppCompatActivity {
 ////                    translationX = Math.max(dX, (-1)* viewHolder.itemView.getWidth() / 2);
 ////                }
 //                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-                getDefaultUIUtil().onDraw(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
+                // Fade out the view as it is swiped out of the parent's bounds
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                    // Fade out the view as it is swiped out of the parent's bounds
+                    final float alpha = 1.0f - Math.abs(dX) / (float) viewHolder.itemView.getWidth();
+//                    viewHolder.itemView.setAlpha(alpha);
+//                    viewHolder.itemView.setTranslationX(dX);
+                    ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView().setAlpha(alpha);
+                    ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView().setTranslationX(dX);
+                    final float alpha1 = Math.abs(dX) / (float) viewHolder.itemView.getWidth();
+                    ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer().setAlpha(alpha1);
+                }
+// else {
+//                    getDefaultUIUtil().onDraw(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
+//                }
             }
+//
             @Override
             public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 getDefaultUIUtil().clearView(((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView());
             }
+
             @Override
             public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 getDefaultUIUtil().onDrawOver(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
