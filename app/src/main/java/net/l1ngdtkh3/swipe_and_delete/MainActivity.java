@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity {
 //                    viewHolder.itemView.setTranslationX(dX);
                     ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView().setAlpha(alpha);
                     ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView().setTranslationX(dX);
-                    final float alpha1 = Math.abs(dX) / (float) viewHolder.itemView.getWidth();
-                    ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer().setAlpha(alpha1);
+//                    final float alpha1 = Math.abs(dX) / (float) viewHolder.itemView.getWidth();
+//                    ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer().setAlpha(alpha1);
                 }
 // else {
 //                    getDefaultUIUtil().onDraw(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
@@ -125,7 +125,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                getDefaultUIUtil().onDrawOver(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
+//                getDefaultUIUtil().onDrawOver(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
+//                View itemView = viewHolder.itemView;
+//                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
+//                p.setColor(Color.parseColor("#D32F2F"));
+//                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
+//                        c.drawRect(background,p);
+                getDefaultUIUtil().onDrawOver(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer(), dX, dY,
+                        actionState, isCurrentlyActive);
             }
         };
 
