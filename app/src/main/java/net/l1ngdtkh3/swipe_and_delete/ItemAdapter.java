@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -41,25 +42,33 @@ public class ItemAdapter extends RecyclerView.Adapter {
         notifyItemRangeChanged(position, itemlist.size());
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
+    public class ItemViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
 
         TextView itemText;
         ViewGroup itemContainer;
         ViewGroup itemContext;
+        TextView itemDelete;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             itemText = (TextView) itemView.findViewById(R.id.item_text);
+            itemDelete = (TextView) itemView.findViewById(R.id.item_delete);
             itemContainer = (ViewGroup) itemView.findViewById(R.id.item_container);
             itemContext = (ViewGroup) itemView.findViewById(R.id.item_context);
+            itemDelete.setOnClickListener(this);
 
         }
         public ViewGroup getSwipableView() {
-            return itemContainer;
+            return itemContext;
         }
 
         public ViewGroup getItemContainer() {
-            return itemContext;
+            return itemContainer;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(v.getContext(), "position = " + getPosition(), Toast.LENGTH_SHORT).show();
         }
     }
 }

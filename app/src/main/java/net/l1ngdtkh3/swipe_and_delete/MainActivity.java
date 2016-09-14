@@ -54,12 +54,18 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-//                ItemAdapter.ItemViewHolder holder = (ItemAdapter.ItemViewHolder) viewHolder;
-//                holder.itemContainer.setVisibility(View.VISIBLE);
                 if (viewHolder != null) {
-                    getDefaultUIUtil().onSelected(((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView());
+                    getDefaultUIUtil().onSelected(((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer());
                 }
-                ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView().setVisibility(View.VISIBLE);
+                ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer().setVisibility(View.VISIBLE);
+            }
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                if (viewHolder instanceof ItemAdapter.ItemViewHolder) {
+                    int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                    return makeMovementFlags(0, swipeFlags);
+                } else
+                    return 0;
             }
 
             @Override
@@ -95,13 +101,16 @@ public class MainActivity extends AppCompatActivity {
 ////                    translationX = Math.max(dX, (-1)* viewHolder.itemView.getWidth() / 2);
 ////                }
 //                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-                getDefaultUIUtil().onDraw(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer(), dX, dY, actionState, isCurrentlyActive);
+                getDefaultUIUtil().onDraw(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
             }
-
-//            @Override
-//            public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-//                getDefaultUIUtil().onDrawOver(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
-//            }
+            @Override
+            public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                getDefaultUIUtil().clearView(((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView());
+            }
+            @Override
+            public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                getDefaultUIUtil().onDrawOver(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
+            }
         };
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
@@ -120,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
             outRect.left = space;
             outRect.right = space;
             outRect.bottom = space;
-            // Add top margin only for the first item to avoid double space between items
             if (parent.getChildPosition(view) == 0)
                 outRect.top = space;
         }
