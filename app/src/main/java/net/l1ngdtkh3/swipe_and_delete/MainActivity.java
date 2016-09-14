@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     final float alpha = 1.0f - Math.abs(dX) / (float) viewHolder.itemView.getWidth();
 //                    viewHolder.itemView.setAlpha(alpha);
 //                    viewHolder.itemView.setTranslationX(dX);
-                    ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView().setAlpha(alpha);
+//                    ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView().setAlpha(alpha);
                     ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView().setTranslationX(dX);
 //                    final float alpha1 = Math.abs(dX) / (float) viewHolder.itemView.getWidth();
 //                    ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer().setAlpha(alpha1);
