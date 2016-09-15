@@ -13,9 +13,11 @@ import java.util.ArrayList;
 
 public class ItemAdapter extends RecyclerView.Adapter {
     private ArrayList itemlist;
+    private MainActivity mainActivity;
 
-    public ItemAdapter(ArrayList itemlist) {
+    public ItemAdapter(MainActivity mainActivity, ArrayList itemlist) {
         this.itemlist = itemlist;
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -32,15 +34,15 @@ public class ItemAdapter extends RecyclerView.Adapter {
         itemHolder.itemDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(),"DELETE",Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "DELETE " + position, Toast.LENGTH_SHORT).show();
                 removeItem(position);
             }
         });
         itemHolder.itemCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(),"CANCEL",Toast.LENGTH_SHORT).show();
-                notifyItemChanged(position);
+                Toast.makeText(v.getContext(), "CANCEL " + position, Toast.LENGTH_SHORT).show();
+                mainActivity.refreshAdapter(position);
                 itemHolder.itemCancel.setEnabled(false);
                 itemHolder.itemDelete.setEnabled(false);
             }

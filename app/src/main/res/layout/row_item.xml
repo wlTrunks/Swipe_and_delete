@@ -24,7 +24,8 @@
             android:layout_weight="1"
             android:enabled="false"
             android:paddingLeft="10dp"
-            android:text="СКРЫТЬ" />
+            android:text="СКРЫТЬ"
+            android:textSize="24sp"/>
 
         <TextView
             android:id="@+id/item_cancel"
@@ -34,7 +35,8 @@
             android:enabled="false"
             android:gravity="center_horizontal|right"
             android:paddingRight="10dp"
-            android:text="ОТМЕНА" />
+            android:text="ОТМЕНА"
+            android:textSize="24sp"/>
     </LinearLayout>
 
     <LinearLayout
