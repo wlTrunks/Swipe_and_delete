@@ -11,7 +11,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-
 public class ItemAdapter extends RecyclerView.Adapter {
     private ArrayList itemlist;
 
@@ -26,9 +25,22 @@ public class ItemAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         ItemViewHolder itemHolder = (ItemViewHolder) holder;
+        final String item = (String) itemlist.get(position);
         itemHolder.itemText.setText((CharSequence) itemlist.get(position));
+        itemHolder.itemDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeItem(position);
+            }
+        });
+        itemHolder.itemCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notifyItemChanged(itemlist.indexOf(item));
+            }
+        });
     }
 
     @Override
@@ -42,33 +54,30 @@ public class ItemAdapter extends RecyclerView.Adapter {
         notifyItemRangeChanged(position, itemlist.size());
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         TextView itemText;
         ViewGroup itemContainer;
         ViewGroup itemContext;
         TextView itemDelete;
+        TextView itemCancel;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             itemText = (TextView) itemView.findViewById(R.id.item_text);
             itemDelete = (TextView) itemView.findViewById(R.id.item_delete);
+            itemCancel = (TextView) itemView.findViewById(R.id.item_cancel);
             itemContainer = (ViewGroup) itemView.findViewById(R.id.item_container);
             itemContext = (ViewGroup) itemView.findViewById(R.id.item_context);
-            itemDelete.setOnClickListener(this);
 
         }
+
         public ViewGroup getSwipableView() {
             return itemContext;
         }
 
         public ViewGroup getItemContainer() {
             return itemContainer;
-        }
-
-        @Override
-        public void onClick(View v) {
-            Toast.makeText(v.getContext(), "position = " + getPosition(), Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -54,10 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                if (viewHolder != null) {
-                    getDefaultUIUtil().onSelected(((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer());
-                }
-                ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer().setVisibility(View.VISIBLE);
+                ((ItemAdapter.ItemViewHolder) viewHolder).itemCancel.setEnabled(true);
+                ((ItemAdapter.ItemViewHolder) viewHolder).itemDelete.setEnabled(true);
             }
 
 //            @Override
@@ -71,69 +69,42 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-//                Bitmap icon;
-//                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
-//
-//                    View itemView = viewHolder.itemView;
-//                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
-//                    float width = height / 3;
-//
-//                    if(dX > 0){
-//                        p.setColor(Color.parseColor("#388E3C"));
-//                        RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX,(float) itemView.getBottom());
-//                        c.drawRect(background,p);
-////                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_edit_white);
-////                        RectF icon_dest = new RectF((float) itemView.getLeft() + width ,(float) itemView.getTop() + width,(float) itemView.getLeft()+ 2*width,(float)itemView.getBottom() - width);
-////                        c.drawBitmap(icon,null,icon_dest,p);
-//                    } else {
-//                        p.setColor(Color.parseColor("#D32F2F"));
-//                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
-//                        c.drawRect(background,p);
-////                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_delete_white);
-////                        RectF icon_dest = new RectF((float) itemView.getRight() - 2*width ,(float) itemView.getTop() + width,(float) itemView.getRight() - width,(float)itemView.getBottom() - width);
-////                        c.drawBitmap(icon,null,icon_dest,p);
-//                    }
-//                }
-////                float translationX;
-////                if(dX > 0){
-////                    translationX = Math.min(-dX, viewHolder.itemView.getWidth() / 2);
-////                }
-////                else {
-////                    translationX = Math.max(dX, (-1)* viewHolder.itemView.getWidth() / 2);
-////                }
-//                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                if (viewHolder.getAdapterPosition() == -1) {
+                    return;
+                }
+
+//                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
                 // Fade out the view as it is swiped out of the parent's bounds
-                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-                    // Fade out the view as it is swiped out of the parent's bounds
-                    final float alpha = 1.0f - Math.abs(dX) / (float) viewHolder.itemView.getWidth();
+//                    final float alpha = 1.0f - Math.abs(dX) / (float) viewHolder.itemView.getWidth();
 //                    viewHolder.itemView.setAlpha(alpha);
 //                    viewHolder.itemView.setTranslationX(dX);
 //                    ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView().setAlpha(alpha);
-                    ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView().setTranslationX(dX);
+//                    ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView().setTranslationX(dX);
 //                    final float alpha1 = Math.abs(dX) / (float) viewHolder.itemView.getWidth();
 //                    ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer().setAlpha(alpha1);
-                }
-// else {
-//                    getDefaultUIUtil().onDraw(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
 //                }
+// else {
+                getDefaultUIUtil().onDraw(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
+//                }
+//                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
 //
-            @Override
-            public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                getDefaultUIUtil().clearView(((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView());
-            }
+//            @Override
+//            public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+//                getDefaultUIUtil().clearView(((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView());
+//            }
 
-            @Override
-            public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-//                getDefaultUIUtil().onDrawOver(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
-//                View itemView = viewHolder.itemView;
-//                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
-//                p.setColor(Color.parseColor("#D32F2F"));
-//                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
-//                        c.drawRect(background,p);
-                getDefaultUIUtil().onDrawOver(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer(), dX, dY,
-                        actionState, isCurrentlyActive);
-            }
+//            @Override
+//            public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+////                getDefaultUIUtil().onDrawOver(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
+////                View itemView = viewHolder.itemView;
+////                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
+////                p.setColor(Color.parseColor("#D32F2F"));
+////                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
+////                        c.drawRect(background,p);
+//                getDefaultUIUtil().onDrawOver(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer(), dX, dY,
+//                        actionState, isCurrentlyActive);
+//            }
         };
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
