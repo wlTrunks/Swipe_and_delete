@@ -26,19 +26,23 @@ public class ItemAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        ItemViewHolder itemHolder = (ItemViewHolder) holder;
+        final ItemViewHolder itemHolder = (ItemViewHolder) holder;
         final String item = (String) itemlist.get(position);
         itemHolder.itemText.setText((CharSequence) itemlist.get(position));
         itemHolder.itemDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(v.getContext(),"DELETE",Toast.LENGTH_SHORT).show();
                 removeItem(position);
             }
         });
         itemHolder.itemCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(v.getContext(),"CANCEL",Toast.LENGTH_SHORT).show();
                 notifyItemChanged(itemlist.indexOf(item));
+                itemHolder.itemCancel.setEnabled(false);
+                itemHolder.itemDelete.setEnabled(false);
             }
         });
     }
