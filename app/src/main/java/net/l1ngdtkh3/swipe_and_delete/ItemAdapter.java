@@ -40,7 +40,7 @@ public class ItemAdapter extends RecyclerView.Adapter {
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(),"CANCEL",Toast.LENGTH_SHORT).show();
-                notifyItemChanged(itemlist.indexOf(item));
+                notifyItemChanged(position);
                 itemHolder.itemCancel.setEnabled(false);
                 itemHolder.itemDelete.setEnabled(false);
             }

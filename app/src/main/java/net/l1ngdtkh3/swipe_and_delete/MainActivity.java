@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 //                    ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer().setAlpha(alpha1);
 //                }
 // else {
-                if (dX>0) {
+                if (dX > 0 || dX < 0) {
                     getDefaultUIUtil().onDraw(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
                 }
 //                }
