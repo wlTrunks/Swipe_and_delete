@@ -6,11 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
 
-public class MyItemTouchHelper extends ItemTouchHelper.Callback {
+public class MyItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
     private ItemAdapter itemAdapter;
 
     public MyItemTouchHelper(ItemAdapter itemAdapter) {
+        super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         this.itemAdapter = itemAdapter;
     }
 
@@ -19,6 +20,10 @@ public class MyItemTouchHelper extends ItemTouchHelper.Callback {
         return makeFlag(ItemTouchHelper.ACTION_STATE_IDLE, ItemTouchHelper.RIGHT) | makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
     }
 
+    @Override
+    public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        return 0;
+    }
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
         return false;
