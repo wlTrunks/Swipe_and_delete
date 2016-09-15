@@ -37,12 +37,12 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new SpacesItemDecoration(20));
 
-        myItemTouchHelper = new MyItemTouchHelper(itemAdaper);
+        itemAdaper = new ItemAdapter(MainActivity.this, itemList);
+        myItemTouchHelper = new MyItemTouchHelper(mRecyclerView, itemAdaper);
 
         for (int i = 1; i < 10; i++) {
             itemList.add("ITEM " + i);
         }
-        itemAdaper = new ItemAdapter(MainActivity.this, itemList);
         mRecyclerView.setAdapter(itemAdaper);
         initSwipe();
     }

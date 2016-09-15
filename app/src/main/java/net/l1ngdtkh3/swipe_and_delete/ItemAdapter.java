@@ -31,22 +31,22 @@ public class ItemAdapter extends RecyclerView.Adapter {
         final ItemViewHolder itemHolder = (ItemViewHolder) holder;
         final String item = (String) itemlist.get(position);
         itemHolder.itemText.setText((CharSequence) itemlist.get(position));
-        itemHolder.itemDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), "DELETE " + position, Toast.LENGTH_SHORT).show();
-                removeItem(position);
-            }
-        });
-        itemHolder.itemCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), "CANCEL " + position, Toast.LENGTH_SHORT).show();
-                mainActivity.refreshAdapter(position);
-                itemHolder.itemCancel.setEnabled(false);
-                itemHolder.itemDelete.setEnabled(false);
-            }
-        });
+//        itemHolder.itemDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(v.getContext(), "DELETE " + position, Toast.LENGTH_SHORT).show();
+//                removeItem(position);
+//            }
+//        });
+//        itemHolder.itemCancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(v.getContext(), "CANCEL " + position, Toast.LENGTH_SHORT).show();
+//                mainActivity.refreshAdapter(position);
+//                itemHolder.itemCancel.setEnabled(false);
+//                itemHolder.itemDelete.setEnabled(false);
+//            }
+//        });
     }
 
     @Override
