@@ -81,4 +81,11 @@ public class MyItemTouchHelper extends ItemTouchHelper.SimpleCallback {
             getDefaultUIUtil().onDraw(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
         }
     }
+
+    @Override
+    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        super.clearView(recyclerView, viewHolder);
+        View foreground = ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer();
+        getDefaultUIUtil().clearView(foreground);
+    }
 }

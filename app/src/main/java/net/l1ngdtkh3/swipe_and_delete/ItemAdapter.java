@@ -1,6 +1,7 @@
 package net.l1ngdtkh3.swipe_and_delete;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,9 +56,13 @@ public class ItemAdapter extends RecyclerView.Adapter {
     }
 
     public void removeItem(int position) {
-        itemlist.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, itemlist.size());
+        Log.d("SWIPEDELETE", "int = " + position);
+        Log.d("SWIPEDELETE", "itemsize = " + itemlist.size());
+        if (itemlist.size() > 0 && position >= 0) {
+            itemlist.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, itemlist.size());
+        }
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
