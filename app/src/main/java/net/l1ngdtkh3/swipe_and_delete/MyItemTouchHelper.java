@@ -77,8 +77,10 @@ public class MyItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 //                    ((ItemAdapter.ItemViewHolder) viewHolder).getItemContainer().setAlpha(alpha1);
 //                }
 // else {
-        if (dX > 0 || dX < 0) {
-            getDefaultUIUtil().onDraw(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
+        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            if (dX > 0 || dX < 0) {
+                getDefaultUIUtil().onDraw(c, recyclerView, ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView(), dX, dY, actionState, isCurrentlyActive);
+            }
         }
     }
 
