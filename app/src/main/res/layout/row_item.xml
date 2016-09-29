@@ -6,65 +6,37 @@
     android:paddingBottom="10dp"
     android:paddingTop="10dp">
 
-      <include layout="@layout/layout_back" android:id="@+id/item_container"/>
-    <!--<LinearLayout-->
-        <!--android:id="@+id/item_container"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:alpha="1"-->
-        <!--android:background="#b19393"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:visibility="visible"-->
-        <!--android:weightSum="2">-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/item_delete"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:enabled="false"-->
-            <!--android:paddingLeft="10dp"-->
-            <!--android:text="СКРЫТЬ"-->
-            <!--android:textSize="24sp"/>-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/item_cancel"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:enabled="false"-->
-            <!--android:gravity="center_horizontal|right"-->
-            <!--android:paddingRight="10dp"-->
-            <!--android:text="ОТМЕНА"-->
-            <!--android:textSize="24sp"/>-->
-    <!--</LinearLayout>-->
+    <include
+        android:id="@+id/item_container"
+        layout="@layout/layout_back" />
 
     <RelativeLayout
         android:id="@+id/front"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@drawable/quest_background_blue"
         android:orientation="horizontal"
-        android:tag="front">
+        android:tag="front"
+        android:focusableInTouchMode="true">
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:padding="8dp"/>
+            android:padding="8dp" />
 
         <include
             android:id="@+id/contprice"
-            layout="@layout/quest_price"
             style="@style/wrap"
+            layout="@layout/quest_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true" />
 
         <LinearLayout
             style="@style/wrap.linear"
@@ -76,11 +48,12 @@
             <TextView
                 android:id="@+id/title"
                 style="@style/quest_title"
-                android:text="Рассказать друзьям"/>
+                android:text="Рассказать друзьям" />
 
             <TextView
                 android:id="@+id/details"
-                style="@style/quest_detail"/>
+                style="@style/quest_detail" />
         </LinearLayout>
     </RelativeLayout>
+
 </FrameLayout>

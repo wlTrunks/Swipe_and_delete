@@ -1,11 +1,14 @@
 package net.l1ngdtkh3.swipe_and_delete;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +35,19 @@ public class ItemAdapter extends RecyclerView.Adapter {
         final ItemViewHolder itemHolder = (ItemViewHolder) holder;
         final String item = (String) itemlist.get(position);
         itemHolder.itemText.setText((CharSequence) itemlist.get(position));
+//        itemHolder.itemContainer.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d("SWIPE", " itemContainer = " + position);
+//            }
+//        });
+//        itemHolder.itemContext.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d("SWIPE", " itemContext = " + position);
+//            }
+//        });
+        holder.itemView.setOnClickListener(itemAdapterClickListener(position));
 //        itemHolder.itemDelete.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -48,6 +64,16 @@ public class ItemAdapter extends RecyclerView.Adapter {
 //                itemHolder.itemDelete.setEnabled(false);
 //            }
 //        });
+    }
+
+    @NonNull
+    public static View.OnClickListener itemAdapterClickListener(final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("SWIPE", " itemView = " + position);
+            }
+        };
     }
 
     @Override
@@ -68,8 +94,8 @@ public class ItemAdapter extends RecyclerView.Adapter {
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         TextView itemText;
-        ViewGroup itemContainer;
-        ViewGroup itemContext;
+        RelativeLayout itemContainer;
+        RelativeLayout itemContext;
         TextView itemDelete;
         TextView itemCancel;
 
@@ -78,8 +104,8 @@ public class ItemAdapter extends RecyclerView.Adapter {
             itemText = (TextView) itemView.findViewById(R.id.details);
             itemDelete = (TextView) itemView.findViewById(R.id.delete);
             itemCancel = (TextView) itemView.findViewById(R.id.cancel);
-            itemContainer = (ViewGroup) itemView.findViewById(R.id.item_container);
-            itemContext = (ViewGroup) itemView.findViewById(R.id.front);
+            itemContainer = (RelativeLayout) itemView.findViewById(R.id.item_container);
+            itemContext = (RelativeLayout) itemView.findViewById(R.id.front);
 
         }
 
