@@ -31,10 +31,10 @@ public class ItemAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final ItemViewHolder itemHolder = (ItemViewHolder) holder;
         final String item = (String) itemlist.get(position);
-        itemHolder.itemText.setText((CharSequence) itemlist.get(position));
+        itemHolder.itemText.setText(item);
 //        itemHolder.itemContainer.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
