@@ -98,13 +98,15 @@ public class ItemAdapter extends RecyclerView.Adapter {
         RelativeLayout itemContext;
         TextView itemDelete;
         TextView itemCancel;
+        View item_container;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             itemText = (TextView) itemView.findViewById(R.id.details);
-            itemDelete = (TextView) itemView.findViewById(R.id.delete);
-            itemCancel = (TextView) itemView.findViewById(R.id.cancel);
+            item_container = itemView.findViewById(R.id.item_container);
             itemContainer = (RelativeLayout) itemView.findViewById(R.id.item_container);
+            itemDelete = (TextView) item_container.findViewById(R.id.delete);
+            itemCancel = (TextView) item_container.findViewById(R.id.cancel);
             itemContext = (RelativeLayout) itemView.findViewById(R.id.front);
 
         }
