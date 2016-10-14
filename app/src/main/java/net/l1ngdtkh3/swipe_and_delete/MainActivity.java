@@ -20,14 +20,16 @@ import android.widget.Toast;
 import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private ArrayList itemList = new ArrayList<>();
+    private List<String> itemList = new ArrayList<>();
     private Paint p = new Paint();
     private ItemAdapter itemAdaper;
     private MyItemTouchHelper myItemTouchHelper;
+    private ItemTouchHelper.Callback myCallback;
     public ItemTouchHelperExtension mItemTouchHelper;
     public ItemTouchHelperExtension.Callback mCallback;
 
@@ -51,15 +53,19 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(itemAdaper);
         initSwipe();
     }
-
+     public void click(RecyclerView.ViewHolder holder){
+         myCallback.clearView(mRecyclerView, holder);
+     }
+        ItemTouchHelper itemTouchHelper;
     protected void refreshAdapter(int position) {
         itemAdaper.notifyItemChanged(position);
     }
 
     private void initSwipe() {
-//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(myItemTouchHelper);
-//        itemTouchHelper.attachToRecyclerView(mRecyclerView);
-        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+        myCallback = new MyItemTouchHelper(mRecyclerView, itemAdaper);
+        itemTouchHelper = new ItemTouchHelper(myCallback);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+//        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     public class SpacesItemDecoration extends RecyclerView.ItemDecoration {

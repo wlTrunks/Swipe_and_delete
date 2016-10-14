@@ -13,13 +13,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ItemAdapter extends RecyclerView.Adapter {
-    private ArrayList itemlist;
+    private List<String> itemlist;
+    List<String> itemListRemoval = new ArrayList<>();
     private MainActivity mainActivity;
 
-    public ItemAdapter(MainActivity mainActivity, ArrayList itemlist) {
+    public ItemAdapter(MainActivity mainActivity, List<String> itemlist) {
         this.itemlist = itemlist;
         this.mainActivity = mainActivity;
     }
@@ -31,39 +33,41 @@ public class ItemAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         final ItemViewHolder itemHolder = (ItemViewHolder) holder;
-        final String item = (String) itemlist.get(position);
-        itemHolder.itemText.setText(item);
-//        itemHolder.itemContainer.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d("SWIPE", " itemContainer = " + position);
-//            }
-//        });
-//        itemHolder.itemContext.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d("SWIPE", " itemContext = " + position);
-//            }
-//        });
-        holder.itemView.setOnClickListener(itemAdapterClickListener(position));
-//        itemHolder.itemDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(v.getContext(), "DELETE " + position, Toast.LENGTH_SHORT).show();
-//                removeItem(position);
-//            }
-//        });
-//        itemHolder.itemCancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(v.getContext(), "CANCEL " + position, Toast.LENGTH_SHORT).show();
-//                mainActivity.refreshAdapter(position);
+        final String item = itemlist.get(position);
+        if (itemListRemoval.contains(item)) {
+            holder.itemView.setOnClickListener(null);
+            itemHolder.getSwipableView().setVisibility(View.INVISIBLE);
+            itemHolder.getItemContainer().setVisibility(View.VISIBLE);
+            itemHolder.itemDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "DELETE " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                    removeItem(position);
+                }
+            });
+            itemHolder.itemCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemListRemoval.remove(item);
+                    itemHolder.getItemContainer().setVisibility(View.INVISIBLE);
+                    Toast.makeText(v.getContext(), "CANCEL " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                    mainActivity.refreshAdapter(holder.getAdapterPosition());
+                    notifyItemChanged(itemlist.indexOf(item));
+                    mainActivity.click(holder);
 //                itemHolder.itemCancel.setEnabled(false);
 //                itemHolder.itemDelete.setEnabled(false);
-//            }
-//        });
+                }
+            });
+        } else {
+            itemHolder.getSwipableView().setVisibility(View.VISIBLE);
+            itemHolder.itemText.setText(item);
+            holder.itemView.setOnClickListener(itemAdapterClickListener(position));
+            itemHolder.itemDelete.setOnClickListener(null);
+            itemHolder.itemCancel.setOnClickListener(null);
+        }
+
     }
 
     @NonNull
@@ -88,6 +92,14 @@ public class ItemAdapter extends RecyclerView.Adapter {
             itemlist.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, itemlist.size());
+        }
+    }
+
+    public void pendingRemoval(int position) {
+        String item = itemlist.get(position);
+        if (!itemListRemoval.contains(item)) {
+            itemListRemoval.add(item);
+            notifyItemChanged(position);
         }
     }
 
