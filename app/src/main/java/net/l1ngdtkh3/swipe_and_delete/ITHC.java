@@ -75,4 +75,11 @@ public class ITHC extends ItemTouchHelperExtension.Callback {
             holder.getSwipableView().setTranslationX(dX);
         }
     }
+
+    @Override
+    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        super.clearView(recyclerView, viewHolder);
+        View foreground = ((ItemAdapter.ItemViewHolder) viewHolder).getSwipableView();
+        getDefaultUIUtil().clearView(foreground);
+    }
 }

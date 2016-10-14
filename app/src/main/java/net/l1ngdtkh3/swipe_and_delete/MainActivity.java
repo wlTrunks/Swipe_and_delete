@@ -62,6 +62,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initSwipe() {
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+        View headerView = LayoutInflater.from(this).inflate(R.layout.header_item, mRecyclerView, false);
+        HeaderDecorationExpanded hd = HeaderDecorationExpanded.with(mRecyclerView)
+                .inflate(R.layout.header_item)
+                .parallax(0.2f)
+                .dropShadowDp(4)
+                .build();
+        mRecyclerView.addItemDecoration(hd);
         myCallback = new MyItemTouchHelper(mRecyclerView, itemAdaper);
         itemTouchHelper = new ItemTouchHelper(myCallback);
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
