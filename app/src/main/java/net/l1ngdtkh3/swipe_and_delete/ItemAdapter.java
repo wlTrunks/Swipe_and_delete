@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -40,11 +41,21 @@ public class ItemAdapter extends RecyclerView.Adapter {
             holder.itemView.setOnClickListener(null);
             itemHolder.getSwipableView().setVisibility(View.INVISIBLE);
             itemHolder.getItemContainer().setVisibility(View.VISIBLE);
+//            holder.itemView.animate()
+//                    .translationY(0)
+//                    .setInterpolator(new DecelerateInterpolator(3.f))
+//                    .setDuration(700)
+//                    .start();
             itemHolder.itemDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(), "DELETE " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
-                    removeItem(position);
+                    removeItem(holder.getAdapterPosition());
+//                    holder.itemView.animate()
+//                            .translationY(0)
+//                            .setInterpolator(new DecelerateInterpolator(3.f))
+//                            .setDuration(1500)
+//                            .start();
                 }
             });
             itemHolder.itemCancel.setOnClickListener(new View.OnClickListener() {
@@ -91,11 +102,11 @@ public class ItemAdapter extends RecyclerView.Adapter {
         if (itemlist.size() > 0 && position >= 0) {
             itemlist.remove(position);
             notifyItemRemoved(position);
-            notifyItemRangeChanged(position, itemlist.size());
+//            notifyItemRangeChanged(position, itemlist.size());
         }
     }
 
-    public void pendingRemoval(int position) {
+    public void redrawViewHolder(int position) {
         String item = itemlist.get(position);
         if (!itemListRemoval.contains(item)) {
             itemListRemoval.add(item);

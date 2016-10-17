@@ -1,23 +1,18 @@
 package net.l1ngdtkh3.swipe_and_delete;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
+
+
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RectF;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.loopeer.itemtouchhelperextension.ItemTouchHelperExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private ItemAdapter itemAdaper;
     private MyItemTouchHelper myItemTouchHelper;
     private ItemTouchHelper.Callback myCallback;
-    public ItemTouchHelperExtension mItemTouchHelper;
-    public ItemTouchHelperExtension.Callback mCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
         itemAdaper = new ItemAdapter(MainActivity.this, itemList);
         myItemTouchHelper = new MyItemTouchHelper(mRecyclerView, itemAdaper);
-        mCallback = new ITHC(itemAdaper, mRecyclerView);
-        mItemTouchHelper = new ItemTouchHelperExtension(mCallback);
         for (int i = 1; i < 10; i++) {
             itemList.add("ITEM " + i);
         }
@@ -62,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initSwipe() {
-        mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
         View headerView = LayoutInflater.from(this).inflate(R.layout.header_item, mRecyclerView, false);
         HeaderDecorationExpanded hd = HeaderDecorationExpanded.with(mRecyclerView)
                 .inflate(R.layout.header_item)
@@ -74,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
         myCallback = new MyItemTouchHelper(mRecyclerView, itemAdaper);
         itemTouchHelper = new ItemTouchHelper(myCallback);
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
-//        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     public class SpacesItemDecoration extends RecyclerView.ItemDecoration {

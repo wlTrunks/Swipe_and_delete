@@ -2,16 +2,10 @@ package net.l1ngdtkh3.swipe_and_delete;
 
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
 public class MyItemTouchHelper extends ItemTouchHelper.Callback {
@@ -49,7 +43,7 @@ public class MyItemTouchHelper extends ItemTouchHelper.Callback {
 //        Log.d("SWIPE", " viewHolder  onSwiped = " + (viewHolder == null));
         final ItemAdapter.ItemViewHolder holder = (ItemAdapter.ItemViewHolder) viewHolder;
         Log.d("ITEMTOUCH", "holder ? null =" + (viewHolder == null));
-        itemAdapter.pendingRemoval(viewHolder.getAdapterPosition());
+        itemAdapter.redrawViewHolder(viewHolder.getAdapterPosition());
 //        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
