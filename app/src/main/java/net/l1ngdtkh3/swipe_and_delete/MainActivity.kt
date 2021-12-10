@@ -1,84 +1,86 @@
-package net.l1ngdtkh3.swipe_and_delete;
+package net.l1ngdtkh3.swipe_and_delete
 
+import android.graphics.Rect
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-
-import android.graphics.Paint;
-import android.graphics.Rect;
-
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.LayoutInflater;
-import android.view.View;
-
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class MainActivity extends AppCompatActivity {
-
-    private RecyclerView mRecyclerView;
-    private List<String> itemList = new ArrayList<>();
-    private Paint p = new Paint();
-    private ItemAdapter itemAdaper;
-    private MyItemTouchHelper myItemTouchHelper;
-    private ItemTouchHelper.Callback myCallback;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(20));
-
-        itemAdaper = new ItemAdapter(MainActivity.this, itemList);
-        myItemTouchHelper = new MyItemTouchHelper(mRecyclerView, itemAdaper);
-        for (int i = 1; i < 10; i++) {
-            itemList.add("ITEM " + i);
-        }
-        mRecyclerView.setAdapter(itemAdaper);
-        initSwipe();
-    }
-     public void click(RecyclerView.ViewHolder holder){
-         myCallback.clearView(mRecyclerView, holder);
-     }
-        ItemTouchHelper itemTouchHelper;
-    protected void refreshAdapter(int position) {
-        itemAdaper.notifyItemChanged(position);
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+    private lateinit var viewModel: MainViewModel
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        initSwipe()
     }
 
-    private void initSwipe() {
-        View headerView = LayoutInflater.from(this).inflate(R.layout.header_item, mRecyclerView, false);
-        HeaderDecorationExpanded hd = HeaderDecorationExpanded.with(mRecyclerView)
-                .inflate(R.layout.header_item)
-                .parallax(0.2f)
-                .dropShadowDp(4)
-                .build();
-        mRecyclerView.addItemDecoration(hd);
-        myCallback = new MyItemTouchHelper(mRecyclerView, itemAdaper);
-        itemTouchHelper = new ItemTouchHelper(myCallback);
-        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+    private fun initSwipe() {
+        val mRecyclerView = findViewById<View>(R.id.recycler_view) as RecyclerView
+        mRecyclerView.layoutManager = LinearLayoutManager(this)
+        mRecyclerView.addItemDecoration(SpacesItemDecoration(20))
+        val myCallback = SwipeItemCallback()
+        val itemTouchHelper = ItemTouchHelper(myCallback)
+        itemTouchHelper.attachToRecyclerView(mRecyclerView)
+        val itemAdapter = ItemAdapter(object : ItemCallBack {
+            override fun onCancel(item: ItemList, viewHolder: RecyclerView.ViewHolder) {
+                myCallback.clearView(mRecyclerView, viewHolder)
+            }
+
+            override fun onDelete(item: ItemList) {
+                viewModel.deleteItem(item)
+            }
+        })
+        mRecyclerView.adapter = itemAdapter
+        lifecycleScope.launchWhenCreated {
+            viewModel.itemFlow.collect {
+                itemAdapter.submitList(it)
+            }
+        }
+    }
+}
+
+interface ItemCallBack {
+    fun onCancel(item: ItemList, viewHolder: RecyclerView.ViewHolder)
+    fun onDelete(item: ItemList)
+}
+
+class MainViewModel : ViewModel() {
+    private val itemList: MutableList<ItemList> = mutableListOf()
+
+    init {
+        for (i in 1..19) {
+            itemList.add(ItemList("ITEM $i"))
+        }
     }
 
-    public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
-        private int space;
+    val itemFlow = MutableStateFlow(itemList.toList())
 
-        public SpacesItemDecoration(int space) {
-            this.space = space;
+    fun deleteItem(item: ItemList) {
+        viewModelScope.launch(Dispatchers.Default) {
+            itemFlow.emit(itemList.filter { it.data != item.data })
+            itemList.remove(item)
         }
+    }
+}
 
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            outRect.left = space;
-            outRect.right = space;
-            outRect.bottom = space;
-            if (parent.getChildPosition(view) == 0)
-                outRect.top = space;
-        }
+data class ItemList(val data: String, var swiped: Boolean = false)
+
+private class SpacesItemDecoration(private val space: Int) : ItemDecoration() {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        outRect.left = space
+        outRect.right = space
+        outRect.bottom = space
+        if (parent.getChildAdapterPosition(view) == 0) outRect.top = space
     }
 }

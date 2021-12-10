@@ -1,15 +1,20 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'kotlin-android'
+
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 31
+    buildToolsVersion "31.0.0"
+
     defaultConfig {
         applicationId "net.l1ngdtkh3.swipe_and_delete"
-        minSdkVersion 14
-        targetSdkVersion 23
+        minSdkVersion 21
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildFeatures {
+        viewBinding = true
     }
     buildTypes {
         release {
@@ -17,25 +22,40 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-//        exclude group: 'com.android.support', module: 'support-annotations'
-//        exclude module: 'recyclerview-v7'
-//    })
-    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2') {
-        exclude group: 'com.android.support', module: 'appcompat'
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude module: 'recyclerview-v7'
-    }
-    compile 'com.android.support:appcompat-v7:24.+'
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:recyclerview-v7:24.+'
-    compile 'com.android.support:support-v4:24.+'
-    compile 'com.loopeer.library:itemtouchhelperextension:1.0.0'
-    apt 'com.google.dagger:dagger-compiler:2.5'
-    compile 'com.google.dagger:dagger:2.5'
-    provided 'javax.annotation:jsr250-api:1.0'
+    implementation "androidx.appcompat:appcompat:$versions.appcompat"
+    implementation "androidx.core:core-ktx:$versions.coreKtx"
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    implementation "androidx.constraintlayout:constraintlayout:+"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:+'
+    implementation "androidx.lifecycle:lifecycle-common-java8:+"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:+"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:+")
+    testImplementation "androidx.test.ext:junit-ktx:1.1.3"
+    testImplementation "androidx.test:rules:1.4.0"
+    testImplementation "androidx.test:runner:1.4.0"
+    androidTestImplementation('androidx.test:core:1.4.0')
+    androidTestImplementation('androidx.test:runner:1.4.0')
+    androidTestImplementation('androidx.test:rules:1.4.0')
+
+    androidTestImplementation('androidx.test.ext:junit:1.1.3')
+    androidTestImplementation('androidx.test.ext:truth:1.4.0')
+    androidTestImplementation('com.google.truth:truth:1.0.1')
+
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.4.0')
+    androidTestImplementation('androidx.test.espresso:espresso-contrib:3.4.0')
+    androidTestImplementation('androidx.test.espresso:espresso-intents:3.4.0')
+    androidTestImplementation('androidx.test.espresso:espresso-accessibility:3.4.0')
+    androidTestImplementation('androidx.test.espresso:espresso-web:3.4.0')
+    androidTestImplementation('androidx.test.espresso.idling:idling-concurrent:3.4.0')
+    androidTestImplementation('androidx.test.espresso:espresso-idling-resource:3.4.0')
 }

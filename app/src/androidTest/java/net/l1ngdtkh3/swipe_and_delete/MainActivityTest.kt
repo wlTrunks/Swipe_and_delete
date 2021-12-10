@@ -1,50 +1,60 @@
-package net.l1ngdtkh3.swipe_and_delete;
+package net.l1ngdtkh3.swipe_and_delete
 
-
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.contrib.RecyclerViewActions;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
-import android.view.View;
-
-import org.hamcrest.Matcher;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.swipeRight;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withChild;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.swipeRight
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
+import net.l1ngdtkh3.swipe_and_delete.MyViewAction.childOfViewAtPositionWithMatcher
+import net.l1ngdtkh3.swipe_and_delete.MyViewAction.clickChildViewWithId
+import net.l1ngdtkh3.swipe_and_delete.MyViewAction.recyclerViewItemCountAssertion
+import net.l1ngdtkh3.swipe_and_delete.MyViewAction.waitUntilShow
+import net.l1ngdtkh3.swipe_and_delete.MyViewAction.withViewAtPosition
+import org.hamcrest.core.AllOf.allOf
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
 
 @LargeTest
-@RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
-
-    @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+@RunWith(AndroidJUnit4::class)
+class MainActivityTest {
+    @get:Rule
+    var activityScenarioRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
-    public void testCancel() {
-
-        onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(3, swipeRight()));
-        onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(3, MyViewAction.clickChildViewWithId(R.id.cancel)));
-
+    fun testCancel() {
+        onView(withId(R.id.recycler_view))
+            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(3, swipeRight()))
+            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(3, clickChildViewWithId(R.id.cancel)))
+            .check(matches(withViewAtPosition(3, hasDescendant(allOf(withId(R.id.front), isDisplayed())))))
     }
+
     @Test
-    public void testDelete() {
-
-        onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.scrollToPosition(7));
-        onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(7, swipeRight()));
-        onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(7, MyViewAction.clickChildViewWithId(R.id.delete)));
-
+    fun testDelete() {
+        val position = 7
+        var itemCount = 0
+        var itemList: List<ItemList>? = null
+        activityScenarioRule.scenario.onActivity {
+            val list = it.findViewById<RecyclerView>(R.id.recycler_view) ?: throw Exception("Recycler view not found")
+            itemCount = list.adapter?.itemCount ?: throw Exception("Recycler adapter null")
+            itemList = (list.adapter as ListAdapter<ItemList, ItemAdapter.ItemViewHolder>).currentList
+        }
+        val textMatch = itemList?.get(position + 1)?.data ?: throw Exception("item list null")
+        onView(withId(R.id.recycler_view))
+            .perform(scrollToPosition<RecyclerView.ViewHolder>(position))
+            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(position, swipeRight()))
+            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(position, clickChildViewWithId(R.id.delete)))
+            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(position, waitUntilShow(R.id.details, 500)))
+            .check(recyclerViewItemCountAssertion(itemCount - 1))
+            .check(matches(childOfViewAtPositionWithMatcher(R.id.details, position, withText(textMatch))))
     }
 }
